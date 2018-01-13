@@ -23,7 +23,7 @@ options = dict(
     license="GPLv3",
     packages=['tornado_systemd'],
     platforms="Any",
-    install_requires=["tornado>=3.2"],
+    install_requires=["tornado>=3.2", "systemd-python>=233"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",

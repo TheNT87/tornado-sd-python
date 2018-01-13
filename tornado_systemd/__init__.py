@@ -21,10 +21,12 @@ class SystemdMixin(object):
             family = family or (
                 socket.AF_INET6 if socket.has_ipv6 else socket.AF_INET)
             type = type or socket.SOCK_STREAM
-            sck = get_systemd_socket()  # socket.fromfd(SYSTEMD_SOCKET_FD, family, type)
-            self.add_socket(sck)
-            sck.setblocking(0)
-            sck.listen(128)
+            # sck = socket.fromfd(SYSTEMD_SOCKET_FD, family, type)
+            sck = get_systemd_socket()
+            (conn, address) = sck.accept()
+            self.add_socket(conn)
+            conn.setblocking(0)
+            conn.listen(128)
         else:
             self.request_callback.systemd = False
             super(SystemdMixin, self).listen(port, address)
