@@ -3,7 +3,7 @@ import socket
 from tornado.tcpserver import TCPServer
 from tornado.httpserver import HTTPServer
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 SYSTEMD_SOCKET_FD = 3  # Magic number !
 
@@ -11,7 +11,11 @@ SYSTEMD_SOCKET_FD = 3  # Magic number !
 class SystemdMixin(object):
     @property
     def systemd(self):
-        return os.environ.get('LISTEN_PID', None) == str(os.getpid())
+        try:
+            from systemd.daemon import listen_fds
+            print(listen_fds())
+        except:
+            return os.environ.get('LISTEN_PID', None) == str(os.getpid())
 
     def listen(self, port, address='', backlog=128, family=None, type=None):
         if self.systemd:
